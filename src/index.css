@@ -17,24 +17,24 @@ All colors MUST be HSL.
     --popover: 0 0% 100%;
     --popover-foreground: 240 10% 15%;
 
-    --primary: 262 83% 58%;
+    --primary: 142 76% 36%;
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 280 65% 50%;
-    --secondary-foreground: 0 0% 100%;
+    --secondary: 45 100% 51%;
+    --secondary-foreground: 240 10% 15%;
 
     --muted: 240 30% 94%;
     --muted-foreground: 240 5% 45%;
 
-    --accent: 35 100% 58%;
-    --accent-foreground: 0 0% 100%;
+    --accent: 45 100% 51%;
+    --accent-foreground: 240 10% 15%;
 
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 100%;
 
     --border: 240 20% 88%;
     --input: 240 20% 88%;
-    --ring: 262 83% 58%;
+    --ring: 142 76% 36%;
 
     --radius: 0.75rem;
 
@@ -42,16 +42,16 @@ All colors MUST be HSL.
     --tile-empty: 0 0% 100%;
     --tile-filled: 240 10% 15%;
     --tile-border: 240 20% 88%;
-    --tile-active: 262 83% 58%;
+    --tile-active: 142 76% 36%;
     
     --correct-indicator: 142 76% 36%;
-    --present-indicator: 35 100% 58%;
+    --present-indicator: 45 100% 51%;
     
     --key-bg: 240 5% 90%;
     --key-greyed: 240 5% 65%;
     --key-text: 240 10% 15%;
 
-    --gradient-primary: linear-gradient(135deg, hsl(262 83% 58%), hsl(280 65% 50%));
+    --gradient-primary: linear-gradient(135deg, hsl(142 76% 36%), hsl(45 100% 51%));
     --gradient-bg: linear-gradient(180deg, hsl(240 45% 98%), hsl(240 35% 96%));
     
     --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -68,38 +68,38 @@ All colors MUST be HSL.
     --popover: 240 15% 12%;
     --popover-foreground: 240 5% 95%;
 
-    --primary: 262 83% 58%;
+    --primary: 142 76% 36%;
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 280 65% 50%;
-    --secondary-foreground: 0 0% 100%;
+    --secondary: 45 100% 51%;
+    --secondary-foreground: 240 10% 15%;
 
     --muted: 240 15% 18%;
     --muted-foreground: 240 5% 65%;
 
-    --accent: 35 100% 58%;
-    --accent-foreground: 0 0% 100%;
+    --accent: 45 100% 51%;
+    --accent-foreground: 240 10% 15%;
 
     --destructive: 0 62.8% 50%;
     --destructive-foreground: 0 0% 100%;
 
     --border: 240 15% 20%;
     --input: 240 15% 20%;
-    --ring: 262 83% 58%;
+    --ring: 142 76% 36%;
 
     --tile-empty: 240 15% 15%;
     --tile-filled: 240 5% 95%;
     --tile-border: 240 15% 25%;
-    --tile-active: 262 83% 58%;
+    --tile-active: 142 76% 36%;
     
     --correct-indicator: 142 76% 36%;
-    --present-indicator: 35 100% 58%;
+    --present-indicator: 45 100% 51%;
     
     --key-bg: 240 15% 22%;
     --key-greyed: 240 10% 35%;
     --key-text: 240 5% 95%;
 
-    --gradient-primary: linear-gradient(135deg, hsl(262 83% 58%), hsl(280 65% 50%));
+    --gradient-primary: linear-gradient(135deg, hsl(142 76% 36%), hsl(45 100% 51%));
     --gradient-bg: linear-gradient(180deg, hsl(240 15% 8%), hsl(240 15% 10%));
   }
 }

@@ -131,7 +131,7 @@ export const GameBoard = () => {
       <div className="w-full max-w-lg">
         <div className="text-center mb-8">
           <h1 className="text-4xl sm:text-5xl font-bold bg-gradient-to-r from-[hsl(var(--primary))] to-[hsl(var(--secondary))] bg-clip-text text-transparent mb-2">
-            Word Puzzle
+            Cows and Bulls
           </h1>
           <p className="text-[hsl(var(--muted-foreground))] text-sm">
             Guess the 4-letter word in {MAX_GUESSES} tries
@@ -162,11 +162,11 @@ export const GameBoard = () => {
           <div className="flex items-center justify-center gap-3 mb-3">
             <div className="flex items-center gap-2">
               <div className="w-4 h-4 rounded-full bg-[hsl(var(--correct-indicator))]" />
-              <span className="text-xs text-[hsl(var(--muted-foreground))]">Right place</span>
+              <span className="text-xs text-[hsl(var(--muted-foreground))]">Cows (right place)</span>
             </div>
             <div className="flex items-center gap-2">
-              <div className="w-4 h-4 rounded-full border-2 border-[hsl(var(--present-indicator))]" />
-              <span className="text-xs text-[hsl(var(--muted-foreground))]">Wrong place</span>
+              <div className="w-4 h-4 rounded-full bg-[hsl(var(--present-indicator))]" />
+              <span className="text-xs text-[hsl(var(--muted-foreground))]">Bulls (wrong place)</span>
             </div>
           </div>
         </div>
