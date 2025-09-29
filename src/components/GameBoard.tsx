@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 
 const WORD_LENGTH = 4;
-const MAX_GUESSES = 6;
+const MAX_GUESSES = 8;
 
 // Sample word list - you can expand this
 const WORDS = ["PLAY", "GAME", "CODE", "WORD", "TILE", "HELP", "STAR", "MOON", "FIRE", "WIND"];
