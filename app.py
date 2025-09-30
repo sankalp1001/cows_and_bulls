@@ -32,7 +32,7 @@ class GuessRequest(BaseModel):
     game_id: str
     guess: str
 
-@app.get("/")
+@app.get("/api")
 async def root():
     return {"message": "Cows and Bulls API is running!"}
 
