@@ -23,6 +23,7 @@ export const GameBoard = () => {
   const [won, setWon] = useState(false);
   const [showPopup, setShowPopup] = useState(false);
   const [popupMessage, setPopupMessage] = useState("");
+  const [stats, setStats] = useState({ gamesPlayed: 0, wins: 0, currentStreak: 0, winPercent: 0 });
   const [greyedLetters, setGreyedLetters] = useState<Set<string>>(new Set());
   const [results, setResults] = useState<{ correctPosition: number; correctLetter: number }[]>([]);
 
@@ -126,11 +127,43 @@ export const GameBoard = () => {
           case 8:
             winMsg = "A hardword indeed."; break;
         }
+        // Update win history in localStorage (Wordle logic)
+        let history = JSON.parse(localStorage.getItem("winHistory") || "{}") || {};
+        history.gamesPlayed = (history.gamesPlayed || 0) + 1;
+        history.wins = (history.wins || 0) + 1;
+        // Streak logic: increment if last game was a win, else reset
+        if (history.lastResult === "win") {
+          history.currentStreak = (history.currentStreak || 0) + 1;
+        } else {
+          history.currentStreak = 1;
+        }
+        history.lastResult = "win";
+        history.winPercent = Math.round((history.wins / history.gamesPlayed) * 100);
+        localStorage.setItem("winHistory", JSON.stringify(history));
+        setStats({
+          gamesPlayed: history.gamesPlayed,
+          wins: history.wins,
+          currentStreak: history.currentStreak,
+          winPercent: history.winPercent
+        });
         setPopupMessage(winMsg);
         setShowPopup(true);
       } else if (data.status === "lose") {
         setGameOver(true);
-        setPopupMessage(`Game Over! The word was ${data.target_word}`);
+        // On loss, increment games played, reset streak
+        let history = JSON.parse(localStorage.getItem("winHistory") || "{}") || {};
+        history.gamesPlayed = (history.gamesPlayed || 0) + 1;
+        history.currentStreak = 0;
+        history.lastResult = "lose";
+        history.winPercent = history.gamesPlayed > 0 ? Math.round((history.wins || 0) / history.gamesPlayed * 100) : 0;
+        localStorage.setItem("winHistory", JSON.stringify(history));
+        setStats({
+          gamesPlayed: history.gamesPlayed,
+          wins: history.wins || 0,
+          currentStreak: 0,
+          winPercent: history.winPercent
+        });
+  setPopupMessage(`Better luck next time! The word was ${data.target_word}`);
         setShowPopup(true);
       }
     } catch (err) {
@@ -154,16 +187,16 @@ export const GameBoard = () => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-between min-h-screen py-8 px-4">
-      <div className="w-full max-w-lg">
+  <div className="flex flex-col items-center justify-between min-h-screen py-2 px-1">
+  <div className="w-full max-w-md">
         <div className="text-center mb-8">
           {/* Logo placeholder - replace 'logo.png' with your actual image filename */}
-          <img src="/logo.png" alt="Game Logo" className="mx-auto mb-4 w-20 h-20 object-contain" />
-          <h1 className="text-4xl sm:text-5xl font-bold mb-2">
+          <img src="/logo.png" alt="Game Logo" className="mx-auto mb-4 w-32 h-32 object-contain" />
+          <h1 className="text-3xl sm:text-4xl font-bold mb-1">
             <span style={{ color: '#16a34a' }}>Cows and </span>
             <span style={{ color: '#facc15' }}>bulls</span>
           </h1>
-          <p className="text-[hsl(var(--muted-foreground))] text-sm">
+          <p className="text-[hsl(var(--muted-foreground))] text-xs">
             Guess the 4-letter word in {MAX_GUESSES} tries
           </p>
         </div>
@@ -193,14 +226,31 @@ export const GameBoard = () => {
         {/* Popup for win/lose */}
         {showPopup && (
           <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-            <div className="rounded-lg shadow-lg p-8 text-center" style={{ background: '#f59e42' }}>
+            <div className="rounded-lg shadow-lg p-8 text-center relative" style={{ background: '#f59e42' }}>
               <h2 className="text-2xl font-bold mb-4 text-gray-900">{popupMessage}</h2>
-              <Button
-                onClick={resetGame}
-                className="bg-gray-900 hover:bg-gray-800 text-white font-semibold px-8"
-              >
-                New Game
-              </Button>
+              <div className="mb-4 flex flex-row justify-center gap-8 text-gray-900 text-lg">
+                <div><b>Games Played:</b> {stats.gamesPlayed}</div>
+                <div><b>Wins:</b> {stats.wins}</div>
+                <div><b>Win %:</b> {stats.winPercent}</div>
+                <div><b>Current Streak:</b> {stats.currentStreak}</div>
+              </div>
+              <div className="flex flex-row justify-center gap-4">
+                <Button
+                  onClick={resetGame}
+                  className="bg-gray-900 hover:bg-gray-800 text-white font-semibold px-8"
+                >
+                  New Game
+                </Button>
+                <Button
+                  onClick={() => {
+                    localStorage.removeItem("winHistory");
+                    setStats({ gamesPlayed: 0, wins: 0, currentStreak: 0, winPercent: 0 });
+                  }}
+                  className="bg-red-600 hover:bg-red-700 text-white font-semibold px-6"
+                >
+                  Clear Cache
+                </Button>
+              </div>
             </div>
           </div>
         )}

@@ -10,7 +10,7 @@ def is_valid_word(word):
         len(word) == 4                 # exactly 4 letters
         and word[-1] != 's'             # not plural
         and len(set(word)) == 4         # no repeating letters
-        and zipf_frequency(word, 'en') > 3.5  # common enough
+        and zipf_frequency(word, 'en') > 3.8  # common enough
         and word.islower()              # avoid proper nouns (capitalized)
         and word.isalpha()              # only alphabetic characters
     )

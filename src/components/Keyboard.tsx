@@ -34,7 +34,7 @@ export const Keyboard = ({ onKeyPress, onEnter, onBackspace, greyedLetters, onTo
   };
 
   return (
-    <div className="w-full max-w-2xl mx-auto pb-4">
+  <div className="w-full max-w-2xl mx-auto pb-4">
       <div className="flex flex-col gap-2">
         {KEYBOARD_ROWS.map((row, rowIndex) => (
           <div key={rowIndex} className="flex justify-center gap-1.5">
