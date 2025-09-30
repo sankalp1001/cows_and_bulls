@@ -6,7 +6,6 @@ aged
 alex
 alot
 also
-amen
 amid
 andy
 anti
@@ -19,7 +18,7 @@ bail
 bait
 bake
 bald
-band
+bandx
 bang
 bank
 bare
@@ -167,10 +166,12 @@ drop
 drug
 drum
 dual
+duet
 duck
 duke
 dumb
 dump
+dusk
 dust
 duty
 each
@@ -487,6 +488,7 @@ pain
 pair
 pale
 palm
+pant
 park
 part
 past
@@ -534,6 +536,7 @@ rain
 ramp
 rand
 rank
+rant
 rape
 rate
 read
@@ -564,6 +567,8 @@ rude
 ruin
 rule
 rush
+rusk
+rust
 ruth
 ryan
 sack

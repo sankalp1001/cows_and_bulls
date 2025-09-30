@@ -14,6 +14,8 @@ const NEW_GAME_URL = "http://localhost:8000/api/new-game";
 const CHECK_GUESS_URL = "http://localhost:8000/api/check-guess";
 
 export const GameBoard = () => {
+  const [showReloadMsg, setShowReloadMsg] = useState(false);
+  const [wasPopupShown, setWasPopupShown] = useState(false);
 
 
   const [gameId, setGameId] = useState<string>("");
@@ -22,7 +24,8 @@ export const GameBoard = () => {
   const [gameOver, setGameOver] = useState(false);
   const [won, setWon] = useState(false);
   const [showPopup, setShowPopup] = useState(false);
-  const [popupMessage, setPopupMessage] = useState("");
+  type PopupMsg = string | { message: string; word: string };
+  const [popupMessage, setPopupMessage] = useState<PopupMsg>("");
   const [stats, setStats] = useState({ gamesPlayed: 0, wins: 0, currentStreak: 0, winPercent: 0 });
   const [greyedLetters, setGreyedLetters] = useState<Set<string>>(new Set());
   const [results, setResults] = useState<{ correctPosition: number; correctLetter: number }[]>([]);
@@ -147,7 +150,10 @@ export const GameBoard = () => {
           winPercent: history.winPercent
         });
         setPopupMessage(winMsg);
-        setShowPopup(true);
+        setTimeout(() => {
+          setShowPopup(true);
+          setWasPopupShown(true);
+        }, 500);
       } else if (data.status === "lose") {
         setGameOver(true);
         // On loss, increment games played, reset streak
@@ -163,7 +169,10 @@ export const GameBoard = () => {
           currentStreak: 0,
           winPercent: history.winPercent
         });
-  setPopupMessage(`Better luck next time! The word was ${data.target_word}`);
+  setPopupMessage({
+    message: "Better luck next time! The word was ",
+    word: data.target_word
+  });
         setShowPopup(true);
       }
     } catch (err) {
@@ -188,7 +197,12 @@ export const GameBoard = () => {
 
   return (
   <div className="flex flex-col items-center justify-between min-h-screen py-2 px-1">
-  <div className="w-full max-w-md">
+      <div className="w-full max-w-md">
+        {showReloadMsg && (
+          <div className="mb-4 text-center text-lg text-white font-semibold">
+            Reload the page for a new game
+          </div>
+        )}
         <div className="text-center mb-8">
           {/* Logo placeholder - replace 'logo.png' with your actual image filename */}
           <img src="/logo.png" alt="Game Logo" className="mx-auto mb-4 w-32 h-32 object-contain" />
@@ -225,9 +239,29 @@ export const GameBoard = () => {
 
         {/* Popup for win/lose */}
         {showPopup && (
-          <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-            <div className="rounded-lg shadow-lg p-8 text-center relative" style={{ background: '#f59e42' }}>
-              <h2 className="text-2xl font-bold mb-4 text-gray-900">{popupMessage}</h2>
+          <div
+            className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-20 z-50"
+            onClick={() => {
+              setShowPopup(false);
+              if (wasPopupShown && (gameOver || won)) setShowReloadMsg(true);
+            }}
+            style={{ cursor: 'pointer' }}
+          >
+            <div
+              className="rounded-lg shadow-lg p-8 text-center relative"
+              style={{ background: '#84c07bff' }}
+              onClick={e => e.stopPropagation()}
+            >
+              {typeof popupMessage === "string" ? (
+                <h2 className="text-2xl font-bold mb-4 text-gray-900">{popupMessage}</h2>
+              ) : (
+                <h2 className="text-2xl font-bold mb-4 text-gray-900">
+                  {popupMessage.message}
+                  <span style={{ color: '#000', fontWeight: 'bold' }}>
+                    {popupMessage.word?.toUpperCase()}
+                  </span>
+                </h2>
+              )}
               <div className="mb-4 flex flex-row justify-center gap-8 text-gray-900 text-lg">
                 <div><b>Games Played:</b> {stats.gamesPlayed}</div>
                 <div><b>Wins:</b> {stats.wins}</div>
@@ -237,18 +271,21 @@ export const GameBoard = () => {
               <div className="flex flex-row justify-center gap-4">
                 <Button
                   onClick={resetGame}
-                  className="bg-gray-900 hover:bg-gray-800 text-white font-semibold px-8"
+                  className="bg-gray-900 hover:bg-gray-800 text-white font-bold px-8 flex items-center gap-2"
+                  style={{ textShadow: '1px 1px 2px black' }}
                 >
-                  New Game
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24"><path fill="currentColor" d="M12 4V1L8 5l4 4V6c3.31 0 6 2.69 6 6s-2.69 6-6 6-6-2.69-6-6h-2c0 4.42 3.58 8 8 8s8-3.58 8-8-3.58-8-8-8z"/></svg>
+                  Play Again
                 </Button>
                 <Button
                   onClick={() => {
                     localStorage.removeItem("winHistory");
                     setStats({ gamesPlayed: 0, wins: 0, currentStreak: 0, winPercent: 0 });
                   }}
-                  className="bg-red-600 hover:bg-red-700 text-white font-semibold px-6"
+                  className="bg-[#FFC300] hover:bg-[#FFB000] text-white font-bold px-6"
+                  style={{}}
                 >
-                  Clear Cache
+                  Reset Stats
                 </Button>
               </div>
             </div>
@@ -263,6 +300,11 @@ export const GameBoard = () => {
         greyedLetters={greyedLetters}
         onToggleGrey={handleToggleGrey}
       />
+      {showReloadMsg && (
+        <div className="mt-6 text-center text-lg text-gray-700 font-semibold">
+          Reload the page for a new game
+        </div>
+      )}
     </div>
   );
 };
