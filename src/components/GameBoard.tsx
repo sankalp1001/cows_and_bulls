@@ -10,8 +10,8 @@ const WORD_LENGTH = 4;
 const MAX_GUESSES = 8;
 
 // Backend endpoints
-const NEW_GAME_URL = "http://localhost:8000/api/new-game";
-const CHECK_GUESS_URL = "http://localhost:8000/api/check-guess";
+const NEW_GAME_URL = "https://cows-and-bulls-8hg4.onrender.com/api/new-game";
+const CHECK_GUESS_URL = "https://cows-and-bulls-8hg4.onrender.com/api/check-guess";
 
 export const GameBoard = () => {
   const [showReloadMsg, setShowReloadMsg] = useState(false);

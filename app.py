@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 import random
 import uuid
@@ -85,6 +86,7 @@ async def check_guess(req: GuessRequest):
         "target_word": secret_word if status == "lose" else None,
         "guess_number": len(guesses)
     }
+app.mount("/", StaticFiles(directory="dist", html=True), name="frontend")
 
 if __name__ == "__main__":
     import uvicorn
