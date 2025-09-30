@@ -5,18 +5,16 @@ interface FeedbackIndicatorProps {
 }
 
 export const FeedbackIndicator = ({ correctPosition, correctLetter, isVisible }: FeedbackIndicatorProps) => {
-  if (!isVisible) return null;
-
   return (
     <div className="flex gap-3 items-center ml-3">
-      {/* Green circle for correct position */}
-      <div className="w-8 h-8 rounded-full bg-[hsl(var(--correct-indicator))] flex items-center justify-center text-white font-bold text-sm animate-in zoom-in duration-300">
-        {correctPosition}
+      {/* Green circle appears only after guess, otherwise empty border */}
+      <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm ${isVisible ? 'bg-green-600 text-white' : 'border-2 border-gray-400 bg-transparent text-transparent'}`}>
+        {isVisible ? correctPosition : ""}
       </div>
 
-      {/* Yellow circle for correct letter wrong position */}
-      <div className="w-8 h-8 rounded-full bg-[hsl(var(--present-indicator))] flex items-center justify-center text-white font-bold text-sm animate-in zoom-in duration-300" style={{ animationDelay: '0.1s' }}>
-        {correctLetter}
+      {/* Yellow circle appears only after guess, otherwise empty border */}
+      <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm ${isVisible ? 'bg-yellow-400 text-black' : 'border-2 border-gray-400 bg-transparent text-transparent'}`}>
+        {isVisible ? correctLetter : ""}
       </div>
     </div>
   );
