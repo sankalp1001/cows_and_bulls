@@ -106,6 +106,15 @@ export const GameBoard = () => {
       setGuesses(newGuesses);
       setResults(newResults);
       setCurrentGuess("");
+
+      // If guess has 0 bulls and 0 cows, cross out all letters from the word
+      if (result.correctPosition === 0 && result.correctLetter === 0) {
+        setGreyedLetters(prev => {
+          const updated = new Set(prev);
+          currentGuess.split("").forEach(l => updated.add(l.toUpperCase()));
+          return updated;
+        });
+      }
       if (data.status === "win") {
         setWon(true);
         setGameOver(true);
@@ -222,7 +231,7 @@ export const GameBoard = () => {
               </p>
             </div>
 
-            <div className="flex flex-col gap-3 mb-8">
+            <div className="flex flex-col gap-1 mb-4">
               {[...Array(MAX_GUESSES)].map((_, index) => {
                 const isCurrentRow = index === guesses.length;
                 const guess = guesses[index] || (isCurrentRow ? currentGuess : "");

@@ -6,7 +6,7 @@ interface FeedbackIndicatorProps {
 
 export const FeedbackIndicator = ({ correctPosition, correctLetter, isVisible }: FeedbackIndicatorProps) => {
   return (
-    <div className="flex gap-3 items-center ml-3">
+  <div className="flex gap-2 items-center ml-2">
       {/* Green circle appears only after guess, otherwise empty border */}
       <div
         className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm

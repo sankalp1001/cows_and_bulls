@@ -11,7 +11,7 @@ export const GameTile = ({ letter, index, isActive, isSubmitted }: GameTileProps
   return (
     <div
       className={cn(
-        "w-14 h-14 sm:w-16 sm:h-16 border-2 rounded-lg flex items-center justify-center text-2xl sm:text-3xl font-bold uppercase transition-all duration-300",
+        "w-12 h-12 sm:w-14 sm:h-14 border-2 rounded-lg flex items-center justify-center text-2xl sm:text-3xl font-bold uppercase transition-all duration-300",
         letter && !isSubmitted && "border-[hsl(var(--tile-active))] tile-pop",
         !letter && !isActive && "border-[hsl(var(--tile-border))] bg-[hsl(var(--tile-empty))]",
         !letter && isActive && "border-[hsl(var(--tile-active))] bg-[hsl(var(--tile-empty))]",
