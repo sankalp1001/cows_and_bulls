@@ -1,10 +1,10 @@
-
-
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
+import { useIsMobile } from "../hooks/use-mobile";
 import { GameRow } from "./GameRow";
 import { LetterSidebar } from "./LetterSidebar";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
+import { MobileKeyboard } from "./MobileKeyboard";
 
 const WORD_LENGTH = 4;
 const MAX_GUESSES = 8;
@@ -14,6 +14,8 @@ const NEW_GAME_URL = "https://cows-and-bulls-8hg4.onrender.com/api/new-game";
 const CHECK_GUESS_URL = "https://cows-and-bulls-8hg4.onrender.com/api/check-guess";
 
 export const GameBoard = () => {
+  const isMobile = useIsMobile();
+  const inputRef = useRef<HTMLInputElement>(null);
   const [showReloadMsg, setShowReloadMsg] = useState(false);
   const [wasPopupShown, setWasPopupShown] = useState(false);
 
@@ -208,9 +210,26 @@ export const GameBoard = () => {
     startNewGame();
   };
 
+  useEffect(() => {
+    if (isMobile && !gameOver && inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, [isMobile, gameOver]);
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-background to-background/80 py-8 px-4">
-      <div className="max-w-6xl mx-auto">
+      {/* Hidden input for mobile to trigger keyboard, UI unchanged */}
+      {isMobile && !gameOver && (
+        <MobileKeyboard
+          onKeyPress={handleKeyPress}
+          onBackspace={handleBackspace}
+          onEnter={handleEnter}
+          greyedLetters={greyedLetters}
+          onToggleLetter={handleToggleGrey}
+        />
+      )}
+      {/* Removed mobile input field. All input handled via tiles. */}
+      <div className={`max-w-6xl mx-auto${isMobile ? ' flex flex-col justify-center items-center min-h-[calc(100vh-200px)] pb-32' : ''}`}>
         {showReloadMsg && (
           <div className="mb-4 text-center text-lg text-foreground font-semibold">
             Reload the page for a new game
@@ -219,7 +238,7 @@ export const GameBoard = () => {
         
         <div className="flex flex-col lg:flex-row gap-8 items-start justify-center">
           {/* Main game area */}
-          <div className="w-full lg:flex-1 max-w-md mx-auto lg:mx-0">
+          <div className={`w-full lg:flex-1${isMobile ? ' flex flex-col justify-center items-center' : ''} max-w-md mx-auto lg:mx-0`}>
             <div className="text-center mb-8">
               <img src="/logo.png" alt="Game Logo" className="mx-auto mb-4 w-32 h-32 object-contain" />
               <h1 className="text-3xl sm:text-4xl font-bold mb-1">
@@ -252,14 +271,16 @@ export const GameBoard = () => {
             </div>
           </div>
 
-          {/* Letter sidebar */}
-          <div className="w-full lg:w-auto mx-auto lg:mx-0 lg:sticky lg:top-8">
-            <LetterSidebar
-              greyedLetters={greyedLetters}
-              onToggleLetter={handleToggleGrey}
-              onClearAll={handleClearAllGrey}
-            />
-          </div>
+          {/* Letter sidebar: only show on desktop */}
+          {!isMobile && (
+            <div className="w-full lg:w-auto mx-auto lg:mx-0 lg:sticky lg:top-8">
+              <LetterSidebar
+                greyedLetters={greyedLetters}
+                onToggleLetter={handleToggleGrey}
+                onClearAll={handleClearAllGrey}
+              />
+            </div>
+          )}
         </div>
 
         {/* Popup for win/lose */}

@@ -9,7 +9,13 @@ interface GameRowProps {
   correctLetter: number;
 }
 
-export const GameRow = ({ guess, isActive, isSubmitted, correctPosition, correctLetter }: GameRowProps) => {
+export const GameRow = ({
+  guess,
+  isActive,
+  isSubmitted,
+  correctPosition,
+  correctLetter,
+}: GameRowProps) => {
   const letters = guess.padEnd(4, " ").split("");
 
   return (
