@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { GameRow } from "./GameRow";
-import { Keyboard } from "./Keyboard";
+import { LetterSidebar } from "./LetterSidebar";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 
@@ -190,52 +190,68 @@ export const GameBoard = () => {
     setGreyedLetters(newGreyed);
   };
 
+  const handleClearAllGrey = () => {
+    setGreyedLetters(new Set());
+  };
+
 
   const resetGame = () => {
     startNewGame();
   };
 
   return (
-  <div className="flex flex-col items-center justify-between min-h-screen py-2 px-1">
-      <div className="w-full max-w-md">
+    <div className="min-h-screen bg-gradient-to-b from-background to-background/80 py-8 px-4">
+      <div className="max-w-6xl mx-auto">
         {showReloadMsg && (
-          <div className="mb-4 text-center text-lg text-white font-semibold">
+          <div className="mb-4 text-center text-lg text-foreground font-semibold">
             Reload the page for a new game
           </div>
         )}
-        <div className="text-center mb-8">
-          {/* Logo placeholder - replace 'logo.png' with your actual image filename */}
-          <img src="/logo.png" alt="Game Logo" className="mx-auto mb-4 w-32 h-32 object-contain" />
-          <h1 className="text-3xl sm:text-4xl font-bold mb-1">
-            <span style={{ color: '#16a34a' }}>Cows and </span>
-            <span style={{ color: '#facc15' }}>bulls</span>
-          </h1>
-          <p className="text-[hsl(var(--muted-foreground))] text-xs">
-            Guess the 4-letter word in {MAX_GUESSES} tries
-          </p>
+        
+        <div className="flex flex-col lg:flex-row gap-8 items-start justify-center">
+          {/* Main game area */}
+          <div className="w-full lg:flex-1 max-w-md mx-auto lg:mx-0">
+            <div className="text-center mb-8">
+              <img src="/logo.png" alt="Game Logo" className="mx-auto mb-4 w-32 h-32 object-contain" />
+              <h1 className="text-3xl sm:text-4xl font-bold mb-1">
+                <span style={{ color: '#16a34a' }}>Cows and </span>
+                <span style={{ color: '#facc15' }}>bulls</span>
+              </h1>
+              <p className="text-[hsl(var(--muted-foreground))] text-xs">
+                Guess the 4-letter word in {MAX_GUESSES} tries
+              </p>
+            </div>
+
+            <div className="flex flex-col gap-3 mb-8">
+              {[...Array(MAX_GUESSES)].map((_, index) => {
+                const isCurrentRow = index === guesses.length;
+                const guess = guesses[index] || (isCurrentRow ? currentGuess : "");
+                const isSubmitted = index < guesses.length;
+                const result = results[index] || { correctPosition: 0, correctLetter: 0 };
+
+                return (
+                  <GameRow
+                    key={index}
+                    guess={guess}
+                    isActive={isCurrentRow}
+                    isSubmitted={isSubmitted}
+                    correctPosition={result.correctPosition}
+                    correctLetter={result.correctLetter}
+                  />
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Letter sidebar */}
+          <div className="w-full lg:w-auto mx-auto lg:mx-0 lg:sticky lg:top-8">
+            <LetterSidebar
+              greyedLetters={greyedLetters}
+              onToggleLetter={handleToggleGrey}
+              onClearAll={handleClearAllGrey}
+            />
+          </div>
         </div>
-
-        <div className="flex flex-col gap-3 mb-8">
-          {[...Array(MAX_GUESSES)].map((_, index) => {
-            const isCurrentRow = index === guesses.length;
-            const guess = guesses[index] || (isCurrentRow ? currentGuess : "");
-            const isSubmitted = index < guesses.length;
-            const result = results[index] || { correctPosition: 0, correctLetter: 0 };
-
-            return (
-              <GameRow
-                key={index}
-                guess={guess}
-                isActive={isCurrentRow}
-                isSubmitted={isSubmitted}
-                correctPosition={result.correctPosition}
-                correctLetter={result.correctLetter}
-              />
-            );
-          })}
-        </div>
-
-        {/* ...existing code... (indicator legend removed) */}
 
         {/* Popup for win/lose */}
         {showPopup && (
@@ -283,7 +299,6 @@ export const GameBoard = () => {
                     setStats({ gamesPlayed: 0, wins: 0, currentStreak: 0, winPercent: 0 });
                   }}
                   className="bg-[#FFC300] hover:bg-[#FFB000] text-white font-bold px-6"
-                  style={{}}
                 >
                   Reset Stats
                 </Button>
@@ -292,19 +307,6 @@ export const GameBoard = () => {
           </div>
         )}
       </div>
-
-      <Keyboard
-        onKeyPress={handleKeyPress}
-        onEnter={handleEnter}
-        onBackspace={handleBackspace}
-        greyedLetters={greyedLetters}
-        onToggleGrey={handleToggleGrey}
-      />
-      {showReloadMsg && (
-        <div className="mt-6 text-center text-lg text-gray-700 font-semibold">
-          Reload the page for a new game
-        </div>
-      )}
     </div>
   );
 };
